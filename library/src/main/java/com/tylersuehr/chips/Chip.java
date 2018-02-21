@@ -77,4 +77,26 @@ public abstract class Chip {
     public boolean isFilterable() {
         return mFilterable;
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) return true;
+        if (!(o instanceof Chip)) {
+            return false;
+        }
+
+        Chip chip = (Chip) o;
+
+        return chip.getId().equals(getId());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + getId().hashCode();
+        result = 31 * result + getTitle().hashCode();
+        result = 31 * result + getSubtitle().hashCode();
+        return result;
+    }
 }
