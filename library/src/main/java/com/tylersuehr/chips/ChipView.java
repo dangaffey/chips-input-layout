@@ -101,6 +101,11 @@ public class ChipView extends FrameLayout implements ChipComponent {
      * @param listener {@link OnChipClickListener}
      */
     public void setOnChipClicked(final OnChipClickListener listener) {
+
+        if (listener == null) {
+            return;
+        }
+
         getChildAt(0).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
