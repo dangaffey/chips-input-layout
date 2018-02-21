@@ -1,4 +1,5 @@
 package com.tylersuehr.chips;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -14,6 +15,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
+
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 
 import java.util.List;
@@ -44,6 +46,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
     /* Displays selected chips and chips EditText */
     private final RecyclerView mChipsRecycler;
     private final ChipsAdapter mChipsAdapter;
+    private TextWatcher textWatcher = new ChipInputTextChangedHandler();
 
     /* Displays filtered chips */
     private FilterableRecyclerView mFilteredRecycler;
@@ -562,11 +565,21 @@ public class ChipsInputLayout extends MaxHeightScrollView
         return mDataSource;
     }
 
+
+    public void setTextWatcher(TextWatcher textWatcher) {
+        if (mChipsInput == null) {
+            return;
+        }
+        mChipsInput.removeTextChangedListener(this.textWatcher);
+        mChipsInput.addTextChangedListener(textWatcher);
+        this.textWatcher = textWatcher;
+    }
+
     ChipsEditText loadChipsInput() {
         if (mChipsInput == null) {
             mChipsInput = new ChipsEditText(getContext());
             mChipsInput.setChipOptions(mOptions);
-            mChipsInput.addTextChangedListener(new ChipInputTextChangedHandler());
+            mChipsInput.addTextChangedListener(textWatcher);
         }
         return mChipsInput;
     }
