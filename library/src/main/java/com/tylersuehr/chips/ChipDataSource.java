@@ -48,7 +48,9 @@ public interface ChipDataSource {
 
     void addFilteredChip(Chip chip);
     void addSelectedChip(Chip chip);
+    void removeSelectedChip(Chip chip);
 
+    void setSelectedChips(List<? extends Chip> chips);
     void clearFilteredChips();
     void clearSelectedChips();
 

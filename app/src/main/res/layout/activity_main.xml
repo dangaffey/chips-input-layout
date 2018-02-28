@@ -20,9 +20,12 @@
         android:id="@+id/chips_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Start typing for chips..."
+        android:hint="Enter phone number..."
         android:textColorHint="#757575"
-        android:textColor="#212121"/>
+        android:textColor="#212121"
+        app:chip_showDetails="false"
+        app:maxRows="3"
+        app:chip_showDelete="true"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"

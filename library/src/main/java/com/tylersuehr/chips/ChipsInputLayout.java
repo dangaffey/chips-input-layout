@@ -5,13 +5,17 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.DrawableRes;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
@@ -40,6 +44,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
     private final ChipOptions mOptions;
     /* Stores the source of all the chips */
     private ChipDataSource mDataSource;
+
     /* Stores reference to the user input */
     private ChipsEditText mChipsInput;
 
@@ -95,6 +100,15 @@ public class ChipsInputLayout extends MaxHeightScrollView
         }
     }
 
+
+    /**
+     * Method for manually clearing the search box
+     */
+    public void clearSearch()
+    {
+        mChipsInput.setText("");
+    }
+
     /**
      * Sets and stores a list of chips that are filterable and updates the
      * UI to enable the filterable RecyclerView accordingly.
@@ -120,12 +134,10 @@ public class ChipsInputLayout extends MaxHeightScrollView
      */
     public void setSelectedChipList(List<? extends Chip> chips) {
         // Set the selected chips in the data source
-        mDataSource.getSelectedChips().clear();
-        mDataSource.getSelectedChips().addAll(chips);
-
-        // Update the chips UI display
-        mChipsAdapter.notifyDataSetChanged();
+        mDataSource.setSelectedChips(chips);
     }
+
+
 
     /**
      * Adds a new chip to the filterable chips, which will update the UI
@@ -156,13 +168,23 @@ public class ChipsInputLayout extends MaxHeightScrollView
      * @param chip {@link Chip}
      */
     public void addSelectedChip(Chip chip) {
-        // Ensure that the chip is not already in the data source
-        if (mDataSource.existsInDataSource(chip)) {
-            throw new IllegalArgumentException("Chip already exists in the data source!");
-        }
-
         // Using the method on data source will update UI
         mDataSource.addSelectedChip(chip);
+        mChipsInput.setText("");
+        mChipsInput.requestFocus();
+    }
+
+
+    /**
+     * Removes a chip from the selected chips, which will update the UI
+     * accordingly because of the change observers.
+     *
+     * @param chip {@link Chip}
+     */
+    public void removeSelectedChip(Chip chip) {
+        if (mDataSource.existsInDataSource(chip)) {
+            mDataSource.removeSelectedChip(chip);
+        }
     }
 
     /**
@@ -581,6 +603,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
             mChipsInput.setChipOptions(mOptions);
             mChipsInput.addTextChangedListener(textWatcher);
         }
+
         return mChipsInput;
     }
 

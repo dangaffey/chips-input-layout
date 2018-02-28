@@ -2,6 +2,7 @@ package com.tylersuehr.chips;
 import android.support.annotation.VisibleForTesting;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,8 +39,19 @@ public class ListChipDataSource extends ObservableChipDataSource {
 
     @Override
     public List<Chip> getSelectedChips() {
-        return new ArrayList<>(mSelected);
+        List<Chip> chipList = new ArrayList<>(mSelected);
+        Collections.sort(chipList, new Comparator<Chip>()
+        {
+            @Override
+            public int compare(Chip chip, Chip t1)
+            {
+                return chip.getTitle().compareTo(t1.getTitle());
+            }
+        });
+        return chipList;
     }
+
+
 
     @Override
     public List<Chip> getFilteredChips() {
@@ -98,6 +110,26 @@ public class ListChipDataSource extends ObservableChipDataSource {
         mSelected.add(chip);
         notifyDataSourceChanged();
         notifyChipSelected(chip);
+    }
+
+    @Override
+    public void removeSelectedChip(Chip chip) {
+        if (chip == null) {
+            throw new NullPointerException("Chip cannot be null!");
+        }
+
+        mSelected.remove(chip);
+        notifyDataSourceChanged();
+    }
+
+    @Override
+    public void setSelectedChips(List<? extends Chip> chips)
+    {
+        mOriginal.clear();
+        mSelected.clear();
+        mOriginal.addAll(chips);
+        mSelected.addAll(chips);
+        notifyDataSourceChanged();
     }
 
     @Override

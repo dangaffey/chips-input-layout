@@ -1,5 +1,6 @@
 package com.tylersuehr.chips;
 
+import android.net.Uri;
 import android.widget.ImageView;
 
 /**
@@ -19,7 +20,7 @@ import android.widget.ImageView;
 class DefaultImageRenderer implements ChipImageRenderer {
     @Override
     public void renderAvatar(ImageView imageView, Chip chip) {
-        if (chip.getAvatarUri() != null) {
+        if (chip.getAvatarUri() != Uri.EMPTY) {
             imageView.setImageURI(chip.getAvatarUri());
         } else if (chip.getAvatarDrawable() != null) {
             imageView.setImageDrawable(chip.getAvatarDrawable());

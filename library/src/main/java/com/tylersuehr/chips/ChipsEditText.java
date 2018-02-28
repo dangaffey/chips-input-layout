@@ -1,6 +1,7 @@
 package com.tylersuehr.chips;
 import android.content.Context;
 import android.graphics.Paint;
+import android.os.Build;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.InputType;
 import android.view.KeyEvent;
@@ -46,6 +47,11 @@ class ChipsEditText extends AppCompatEditText implements ChipComponent {
         // No suggestions
         setInputType(InputType.TYPE_TEXT_VARIATION_FILTER
                 |InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            setImportantForAutofill(IMPORTANT_FOR_AUTOFILL_NO);
+        }
     }
 
     /**
