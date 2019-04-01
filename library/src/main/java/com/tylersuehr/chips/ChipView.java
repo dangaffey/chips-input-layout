@@ -81,6 +81,8 @@ public class ChipView extends FrameLayout implements ChipComponent {
             mContainer.setBackgroundTintList(options.mChipColor);
         }
 
+        mButtonDelete.setAlpha(options.mDeleteIconAlpha);
+
         mLabelView.setTypeface(options.mTypeface);
 
         mImageRenderer = options.mImageRenderer;

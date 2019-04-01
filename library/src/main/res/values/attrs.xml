@@ -36,5 +36,6 @@
         <attr name="filter_textColor" format="color" />
 
         <attr name="chipColor" format="color"/>
+        <attr name="delete_icon_alpha" format="float"/>
     </declare-styleable>
 </resources>

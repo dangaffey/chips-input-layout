@@ -27,6 +27,7 @@ final class ChipOptions {
     ColorStateList mChipBackgroundColor;
     ColorStateList mChipTextColor;
     ColorStateList mChipColor;
+    float mDeleteIconAlpha;
     boolean mShowAvatar;
     boolean mShowDetails;
     boolean mShowDelete;
@@ -70,6 +71,8 @@ final class ChipOptions {
         mChipBackgroundColor = a.getColorStateList(R.styleable.ChipsInputLayout_chip_backgroundColor);
         mChipTextColor = a.getColorStateList(R.styleable.ChipsInputLayout_chip_textColor);
         mChipColor = a.getColorStateList(R.styleable.ChipsInputLayout_chipColor);
+        mDeleteIconAlpha = a.getFloat(R.styleable.ChipsInputLayout_delete_icon_alpha, .53f);
+
 
         // Setup the properties for the DetailedChipView
         mDetailsChipDeleteIconColor = a.getColorStateList(R.styleable.ChipsInputLayout_details_deleteIconColor);
@@ -77,7 +80,7 @@ final class ChipOptions {
         mDetailsChipTextColor = a.getColorStateList(R.styleable.ChipsInputLayout_details_textColor);
 
         // Setup the properties for the FilterableRecyclerView
-        mFilterableListElevation = a.getDimension(R.styleable.ChipsInputLayout_filter_elevation, R.dimen.chip_open_elevation);
+        mFilterableListElevation = a.getDimension(R.styleable.ChipsInputLayout_filter_elevation, 8.0f);
         mFilterableListBackgroundColor = a.getColorStateList(R.styleable.ChipsInputLayout_filter_backgroundColor);
         mFilterableListTextColor = a.getColorStateList(R.styleable.ChipsInputLayout_filter_textColor);
 
