@@ -34,5 +34,7 @@
         <attr name="filter_elevation" format="dimension"/>
         <attr name="filter_backgroundColor" format="color" />
         <attr name="filter_textColor" format="color" />
+
+        <attr name="chipColor" format="color"/>
     </declare-styleable>
 </resources>

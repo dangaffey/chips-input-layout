@@ -23,7 +23,10 @@
         android:hint="Enter phone number..."
         android:textColorHint="#757575"
         android:textColor="#212121"
+        app:chip_textColor="#ffffff"
+        app:chip_showAvatar="false"
         app:chip_showDetails="false"
+        app:chipColor="#422d92"
         app:maxRows="3"
         app:chip_showDelete="true"/>
     <TextView
