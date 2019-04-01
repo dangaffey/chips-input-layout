@@ -27,6 +27,7 @@
         app:chip_showAvatar="false"
         app:chip_showDetails="false"
         app:chipColor="#422d92"
+        app:delete_icon_alpha="1"
         app:maxRows="3"
         app:chip_showDelete="true"/>
     <TextView
