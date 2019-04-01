@@ -26,6 +26,7 @@ final class ChipOptions {
     ColorStateList mChipDeleteIconColor;
     ColorStateList mChipBackgroundColor;
     ColorStateList mChipTextColor;
+    ColorStateList mChipColor;
     boolean mShowAvatar;
     boolean mShowDetails;
     boolean mShowDelete;
@@ -45,6 +46,8 @@ final class ChipOptions {
     boolean mAllowCustomChips;
     boolean mHideKeyboardOnChipClick;
     int mMaxRows;
+
+
 
     @NonNull
     ChipImageRenderer mImageRenderer;
@@ -66,6 +69,7 @@ final class ChipOptions {
         mChipDeleteIconColor = a.getColorStateList(R.styleable.ChipsInputLayout_chip_deleteIconColor);
         mChipBackgroundColor = a.getColorStateList(R.styleable.ChipsInputLayout_chip_backgroundColor);
         mChipTextColor = a.getColorStateList(R.styleable.ChipsInputLayout_chip_textColor);
+        mChipColor = a.getColorStateList(R.styleable.ChipsInputLayout_chipColor);
 
         // Setup the properties for the DetailedChipView
         mDetailsChipDeleteIconColor = a.getColorStateList(R.styleable.ChipsInputLayout_details_deleteIconColor);

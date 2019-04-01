@@ -1,6 +1,7 @@
 package com.tylersuehr.chips;
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
@@ -23,6 +24,7 @@ public class ChipView extends FrameLayout implements ChipComponent {
     private ImageButton mButtonDelete;
     private TextView mLabelView;
     private Chip mChip;
+    private ConstraintLayout mContainer;
 
 
     ChipView(@NonNull Context context) {
@@ -31,6 +33,7 @@ public class ChipView extends FrameLayout implements ChipComponent {
         mAvatarView = findViewById(R.id.avatar);
         mLabelView = findViewById(R.id.label);
         mButtonDelete = findViewById(R.id.button_delete);
+        mContainer = findViewById(R.id.container);
     }
 
     @Override
@@ -73,6 +76,11 @@ public class ChipView extends FrameLayout implements ChipComponent {
         if (options.mChipTextColor != null) {
             mLabelView.setTextColor(options.mChipTextColor);
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mContainer.setBackgroundTintList(options.mChipColor);
+        }
+
         mLabelView.setTypeface(options.mTypeface);
 
         mImageRenderer = options.mImageRenderer;
