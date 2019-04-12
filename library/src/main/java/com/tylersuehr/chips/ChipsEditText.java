@@ -4,6 +4,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -27,6 +28,7 @@ import android.widget.RelativeLayout;
 class ChipsEditText extends AppCompatEditText implements ChipComponent {
     private OnKeyboardListener mKeyboardListener;
 
+    private CharSequence keyBoardText = "";
 
     ChipsEditText(Context c) {
         super(c);
@@ -63,6 +65,14 @@ class ChipsEditText extends AppCompatEditText implements ChipComponent {
             this.mKeyboardListener.onKeyboardActionDone(getText().toString());
         }
         super.onEditorAction(actionCode);
+    }
+
+
+    @Override
+    protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
+        super.onTextChanged(text, start, lengthBefore, lengthAfter);
+        keyBoardText = text;
+        setSelection(text.length());
     }
 
     @Override
@@ -119,12 +129,12 @@ class ChipsEditText extends AppCompatEditText implements ChipComponent {
         private ChipsInputConnection(InputConnection target) {
             super(target, true);
         }
-
         @Override
         public boolean sendKeyEvent(KeyEvent event) {
             if (mKeyboardListener != null) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN
                         && event.getKeyCode() == KeyEvent.KEYCODE_DEL) { // Backspace key
+                    setText(keyBoardText.subSequence(0, keyBoardText.length()));
                     mKeyboardListener.onKeyboardBackspace();
                 }
             }

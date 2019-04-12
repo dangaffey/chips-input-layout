@@ -9,7 +9,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 28
         versionCode 1
-        versionName "1.3.5"
+        versionName "1.3.6"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -35,7 +35,7 @@ uploadArchives {
 
             pom.groupId	= "com.wolfe"
             pom.artifactId = "chips"
-            pom.version	= "1.3.5"
+            pom.version	= "1.3.6"
             pom.packaging = "aar"
         }
     }
