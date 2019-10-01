@@ -2,7 +2,7 @@ package com.tylersuehr.chips;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
-import android.support.v7.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatEditText;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
