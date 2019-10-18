@@ -57,11 +57,6 @@ final class ChipOptions {
     ChipOptions(Context c, AttributeSet attrs) {
         TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.ChipsInputLayout);
 
-        // Setup the properties for the ChipEditText
-        mTextColorHint = a.getColorStateList(R.styleable.ChipsInputLayout_android_textColorHint);
-        mTextColor = a.getColorStateList(R.styleable.ChipsInputLayout_android_textColor);
-        mHint = a.getString(R.styleable.ChipsInputLayout_android_hint);
-
         // Setup the properties for the ChipView
         mShowDetails = a.getBoolean(R.styleable.ChipsInputLayout_chip_showDetails, true);
         mShowAvatar = a.getBoolean(R.styleable.ChipsInputLayout_chip_showAvatar, true);

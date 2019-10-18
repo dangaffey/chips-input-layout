@@ -1,10 +1,14 @@
 package com.tylersuehr.chips;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  * Copyright © 2017 Tyler Suehr
@@ -24,22 +28,26 @@ import android.widget.RelativeLayout;
  */
 class ChipsAdapter
         extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-        implements ChipsEditText.OnKeyboardListener, ChipDataSource.ChangeObserver {
+        implements ChipDataSource.ChangeObserver {
     private static final int CHIP  = 0;
     private static final int INPUT = 1;
 
     private final ChipDataSource mDataSource;
     private final ChipOptions mOptions;
-    private final ChipsEditText mEditText;
+    private final EditText mEditText;
+    private final View holder;
+    private EmptyChipsListener listener;
 
 
     ChipsAdapter(ChipDataSource dataSource,
-                 ChipsEditText editText,
-                 ChipOptions options) {
+                 EditText editText,
+                 ChipOptions options, View holder,
+                 EmptyChipsListener listener) {
         mDataSource = dataSource;
         mEditText = editText;
         mOptions = options;
-        mEditText.setKeyboardListener(this);
+        this.holder = holder;
+        this.listener = listener;
 
         // Register an observer on the chip data source
         mDataSource.addChangedObserver(this);
@@ -54,105 +62,28 @@ class ChipsAdapter
     @Override
     public int getItemCount() {
         // Plus 1 for the edit text
-        return mDataSource.getSelectedChips().size() + 1;
+        return mDataSource.getSelectedChips().size();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return viewType == CHIP
                 ? new ChipHolder(new ChipView(parent.getContext()))
-                : new RecyclerView.ViewHolder(mEditText) {};
+                : new RecyclerView.ViewHolder(holder) {};
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) == CHIP) { // Chips
-            // Display the chip information on the chip view
-            final ChipHolder ch = (ChipHolder)holder;
-            ch.chipView.inflateFromChip(mDataSource.getSelectedChip(position));
-        } else { // EditText
-            if (mDataSource.getSelectedChips().size() == 0) {
-                mEditText.setHint(mOptions.mHint);
-            }
-
-            // Resize the edit text to fit in recycler
-            autoFitEditText();
-        }
+        // Display the chip information on the chip view
+        final ChipHolder ch = (ChipHolder)holder;
+        ch.chipView.inflateFromChip(mDataSource.getSelectedChip(position));
     }
 
-    /**
-     * Called when the IME_ACTION_DONE option is pressed on a software or
-     * physical keyboard.
-     *
-     * @param text Current text in the EditText
-     */
-    @Override
-    public void onKeyboardActionDone(String text) {
-        if (TextUtils.isEmpty(text) || !mOptions.mAllowCustomChips) { return; }
-
-        // Clear the input before taking chip so we don't need to update UI twice
-        mEditText.setText("");
-
-        // This will trigger callback, which calls notifyDataSetChanged()
-        mDataSource.addSelectedChip(new DefaultCustomChip(text));
-    }
-
-    /**
-     * Called when the backspace (KEYCODE_DEL) is pressed on a software or
-     * physical keyboard.
-     */
-    @Override
-    public void onKeyboardBackspace() {
-        // Only remove the last chip if the input was empty
-        if (mDataSource.getSelectedChips().size() > 0
-                && mEditText.getText().length() == 0) {
-            // Will trigger notifyDataSetChanged()
-            mDataSource.replaceChip(mDataSource.getSelectedChips().size() - 1);
-        }
-    }
 
     @Override
     public void onChipDataSourceChanged() {
         notifyDataSetChanged();
-    }
-
-    private void autoFitEditText() {
-        // Set the EditText to a minimum width of its hint length
-        ViewGroup.LayoutParams lp = mEditText.getLayoutParams();
-        lp.width = (int)mEditText.calculateTextWidth();
-        mEditText.setLayoutParams(lp);
-
-        // Listen to changes in the tree
-        mEditText.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // Get right of recycler and left of edit text
-                final View parent = (View)mEditText.getParent();
-                int right = parent.getRight();
-                int left = mEditText.getLeft();
-
-                // Calculate the available space left to draw the EditText,
-                // and only readjust the EditText when the available space
-                // is larger than the needed space.
-                //
-                // This will allow the full text hint to always be visible
-                // by ensuring the EditText gets wrapped to the next line
-                // if it can't fit in the available space.
-                final int available = (right - left - Utils.dp(8));
-                ViewGroup.LayoutParams lp = mEditText.getLayoutParams();
-                if (lp.width < available) {
-                    lp.width = available;
-                    mEditText.setLayoutParams(lp);
-                }
-
-                // Request focus
-                mEditText.requestFocus();
-
-                // Remove the tree listener
-                mEditText.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
+        listener.updateChipsHeader(getItemCount());
     }
 
     private void showDetailedChipView(ChipView view, Chip chip, final int position) {
@@ -192,25 +123,10 @@ class ChipsAdapter
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 
-        // Determine the detailed chip's alignment inside the window
-        if (coord[0] <= 0) { // Left align
-            lp.leftMargin = 0;
-            lp.topMargin = coord[1] - Utils.dp(13);
-            detailedChipView.alignLeft();
-        } else if (coord[0] + Utils.dp(300) > windowWidth + Utils.dp(13)) { // Right align
-            lp.leftMargin = windowWidth - Utils.dp(300);
-            lp.topMargin = coord[1] - Utils.dp(13);
-            detailedChipView.alignRight();
-        } else { // Same position as chip
-            lp.leftMargin = coord[0] - Utils.dp(13);
-            lp.topMargin = coord[1] - Utils.dp(13);
-        }
-
         // Show the detailed chip view
         rootView.addView(detailedChipView, lp);
         detailedChipView.fadeIn();
     }
-
 
     /**
      * Nested inner-subclass of {@link RecyclerView.ViewHolder} that stores

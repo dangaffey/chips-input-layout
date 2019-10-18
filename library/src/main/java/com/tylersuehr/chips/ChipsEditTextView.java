@@ -1,37 +1,27 @@
 package com.tylersuehr.chips;
+
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.InputType;
-import android.util.Log;
+import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
 import android.widget.RelativeLayout;
 
-/**
- * Copyright © 2017 Tyler Suehr
- *
- * Subclass of {@link AppCompatEditText} that provides a solution for detecting both
- * the IME_ACTION_DONE and backspace key press on software keyboards.
- *
- * Setting onKeyEventListener doesn't work on software keyboards (IME) :(
- *
- * TODO: Also try to simplify text watcher crap with this as well
- *
- * @author Tyler Suehr
- * @version 1.0
- */
-class ChipsEditText extends AppCompatEditText implements ChipComponent {
-    private OnKeyboardListener mKeyboardListener;
+public class ChipsEditTextView extends AppCompatEditText implements ChipComponent {
+    private ChipsEditTextView.OnKeyboardListener mKeyboardListener;
 
     private CharSequence keyBoardText = "";
 
-    ChipsEditText(Context c) {
+    public ChipsEditTextView(Context c) {
         super(c);
+
         setBackgroundResource(android.R.color.transparent);
         setLayoutParams(new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -54,6 +44,8 @@ class ChipsEditText extends AppCompatEditText implements ChipComponent {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setImportantForAutofill(IMPORTANT_FOR_AUTOFILL_NO);
         }
+
+        setVisibility(View.GONE);
     }
 
     /**
@@ -77,7 +69,7 @@ class ChipsEditText extends AppCompatEditText implements ChipComponent {
 
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        return new ChipsInputConnection(super.onCreateInputConnection(outAttrs));
+        return new ChipsEditTextView.ChipsInputConnection(super.onCreateInputConnection(outAttrs));
     }
 
     @Override
@@ -92,17 +84,17 @@ class ChipsEditText extends AppCompatEditText implements ChipComponent {
         setTypeface(options.mTypeface);
     }
 
-    float calculateTextWidth() {
-        final Paint paint = getPaint();
-        final String hint = getHint().toString();
-        return paint.measureText(hint);
-    }
+//    float calculateTextWidth() {
+//        final Paint paint = getPaint();
+//        final String hint = getHint().toString();
+//        return paint.measureText(hint);
+//    }
 
-    void setKeyboardListener(OnKeyboardListener listener) {
+    void setKeyboardListener(ChipsEditTextView.OnKeyboardListener listener) {
         mKeyboardListener = listener;
     }
 
-    OnKeyboardListener getKeyboardListener() {
+    ChipsEditTextView.OnKeyboardListener getKeyboardListener() {
         return mKeyboardListener;
     }
 

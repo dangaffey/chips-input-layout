@@ -1,10 +1,12 @@
 package com.tylersuehr.chipexample;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 
 import com.tylersuehr.chips.ChipsInputLayout;
+import com.tylersuehr.chips.ChipsLayout;
 
 import java.util.List;
 
@@ -29,11 +31,12 @@ public class MainActivity extends ContactLoadingActivity
         setSupportActionBar(toolbar);
 
         // Setup chips input
-        mChipsInput = (ChipsInputLayout)findViewById(R.id.chips_input);
-        mChipsInput.setImageRenderer(new GlideRenderer());
+        mChipsInput = findViewById(R.id.chips_input);
+        mChipsInput.getChipsLayout().setImageRenderer(new GlideRenderer());
 
         // Load the current user's contact information
         loadContactsWithRuntimePermission();
+
     }
 
     /**
@@ -42,7 +45,7 @@ public class MainActivity extends ContactLoadingActivity
     @Override
     protected void onContactsAvailable(List<ContactChip> chips) {
         System.out.println("Number of contacts: " + chips.size());
-        mChipsInput.setFilterableChipList(chips);
+        mChipsInput.getChipsLayout().setFilterableChipList(chips);
     }
 
     @Override

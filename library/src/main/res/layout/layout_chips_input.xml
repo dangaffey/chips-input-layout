@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+android:background="#ffffff"
+android:orientation="vertical"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditText
+        android:maxLines="1"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:ellipsize="end"
+        android:hint="@string/search_hint"
+        android:textSize="18sp"
+        android:textColor="@color/textLight"
+        android:drawablePadding="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:drawableStart="@drawable/ic_search"
+        android:background="#ffffff"
+        android:id="@+id/edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"/>
+    <RelativeLayout
+        android:id="@+id/header"
+        android:background="@color/divider_grey"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+        <TextView
+            android:layout_centerVertical="true"
+            android:clickable="false"
+            android:focusable="false"
+            android:enabled="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/header_text"
+            android:textColor="@color/textDark"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <com.tylersuehr.chips.ChipsLayout
+        android:id="@+id/chips_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"/>
+</LinearLayout>

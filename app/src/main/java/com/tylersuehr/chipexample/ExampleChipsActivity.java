@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.tylersuehr.chips.ChipsInputLayout;
 import java.util.List;
@@ -38,10 +40,17 @@ public class ExampleChipsActivity extends ContactLoadingActivity
         recycler.setAdapter(contactAdapter);
 
         // Setup chips input
-        this.chipsInput = (ChipsInputLayout)findViewById(R.id.chips_input);
+        this.chipsInput = findViewById(R.id.chips_input);
 
         // Load the current user's contact information
         loadContactsWithRuntimePermission();
+
+        recycler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ExampleChipsActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -50,7 +59,8 @@ public class ExampleChipsActivity extends ContactLoadingActivity
     @Override
     protected void onContactsAvailable(List<ContactChip> chips) {
         System.out.println("Number of contacts: " + chips.size());
-        this.chipsInput.setFilterableChipList(chips);
+        this.chipsInput.getChipsLayout().setFilterableChipList(chips);
+
     }
 
     @Override

@@ -11,4 +11,8 @@
     <color name="chip_focused_text_color">#FFFFFF</color>
     <color name="chip_text_color">#DB000000</color>
     <color name="chip_icon_color">#8C000000</color>
+
+    <color name="textLight">#747474</color>
+    <color name="textDark">#222222</color>
+    <color name="divider_grey">#EDEDED</color>
 </resources>

@@ -104,7 +104,7 @@ public abstract class ObservableChipDataSource implements ChipDataSource {
      */
     protected final void notifyDataSourceChanged() {
         if (mChangeObservers != null) {
-            synchronized (this) {
+                synchronized (this) {
                 for (ChangeObserver ob : mChangeObservers) {
                     ob.onChipDataSourceChanged();
                 }
